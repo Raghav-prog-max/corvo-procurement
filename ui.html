@@ -8,7 +8,7 @@
 let state={},page='workspace',selectedRun='',filter='all',query='',chatDraft={},draftContract=null,tablePage=0;const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});const labels={workspace:'Buyer workspace',chat:'New request',suppliers:'Preferred suppliers',policy:'Policy center',data:'Data library',audit:'Activity log'};
 function toast(t,error=false){$('#toast').textContent=t;$('#toast').className='toast'+(error?' error':'');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>$('#toast').classList.add('hidden'),7000)}
 async function api(path,body){const r=await fetch('/api/'+path,body===undefined?{}:{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});const j=await r.json();if(!r.ok)throw Error(j.error||'Request failed');return j}
-async function refresh(){state=await api('state');render()}
+async function refresh(){state=await api('state');chatDraft=state.intakeDraft||chatDraft;render()}
 function run(){return state.runs?.find(r=>r.id===selectedRun)||state.runs?.at(-1)}
 function heading(title,sub,actions=''){return `<div class="heading"><div><div class="eyebrow">PROCUREMENT, SIMPLIFIED</div><h1>${title}</h1><p class="sub">${sub}</p></div><div class="heading-actions">${actions}</div></div>`}
 function badge(route){return `<span class="badge ${/RFQ|RFP|SOURCING/.test(route)?'amber':/EMERGENCY/.test(route)?'blue':''}">${esc(route?.replaceAll('_',' '))}</span>`}
