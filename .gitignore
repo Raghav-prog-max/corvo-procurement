@@ -1,0 +1,9 @@
+dist/
+site.tar.gz
+
+.local/
+node_modules/
+dist/
+*.csv
+*.pdf
+.env*
